@@ -23,21 +23,24 @@ jobs:
             ACCESS_TOKEN=$(echo "$response" | jq -r '.access_token')
 
             # Call Upwind API
-            CURL_CMD="curl -fsSL \"${UPWIND_API_ENDPOINT}/v1/organizations/$UPWIND_ORGANIZATION_ID/events\" \
+            NOW=$(date +%s000)
+            
+            CURL_CMD="curl -fsSL \"api.upwind.io/v1/organizations/org_1JdmsjWlArDKYItf/events\" \
             --request POST \
             --write-out \"\n%{http_code}\" \
             --header \"Content-Type: application/json\" \
-            --header \"Authorization: Bearer $ACCESS_TOKEN\" \
+            --header \"Authorization: Bearer eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6IkF3VGtYTlM3enNnVDdYb0loUERkVCJ9.eyJpc3MiOiJodHRwczovL2F1dGgudXB3aW5kLmlvLyIsInN1YiI6Imdvb2dsZS1vYXV0aDJ8MTE0NTQ5NzcyNDUxMDI2ODYwNTE0IiwiYXVkIjpbImh0dHBzOi8vYWdlbnQudXB3aW5kLmlvIiwiaHR0cHM6Ly91cHdpbmRzZWN1cml0eS51cy5hdXRoMC5jb20vdXNlcmluZm8iXSwiaWF0IjoxNzM1MTM2OTE4LCJleHAiOjE3MzUyMjMzMTgsInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJvcmdfaWQiOiJvcmdfMUpkbXNqV2xBckRLWUl0ZiIsImF6cCI6IktOSEl6SnU0MnptaHFNWmRlRFBwT25BMmJYWEdRODlhIiwicGVybWlzc2lvbnMiOlsiY3JlYXRlOmFwcGxpY2F0aW9ucyIsImNyZWF0ZTpjbGllbnQtY3JlZGVudGlhbHMiLCJjcmVhdGU6Y3JlZGVudGlhbHMiLCJjcmVhdGU6ZGV0ZWN0aW9ucyIsImNyZWF0ZTppbnZpdGF0aW9ucyIsImRlbGV0ZTphcHBsaWNhdGlvbnMiLCJkZWxldGU6Y2xpZW50LWNyZWRlbnRpYWxzIiwiZGVsZXRlOmNyZWRlbnRpYWxzIiwiZGVsZXRlOmRldGVjdGlvbnMiLCJkZWxldGU6aW52aXRhdGlvbnMiLCJkZWxldGU6dXNlcnMiLCJnZXQ6Y2x1c3RlckNvbm5lY3Rpdml0eSIsImdldDpjbHVzdGVyc0Nvbm5lY3Rpb24iLCJnZXQ6Y3JlZGVudGlhbHMiLCJnZXQ6ZGV0YWlsZWRFdmVudHMiLCJnZXQ6ZGV0ZWN0aW9ucyIsImdldDpkZXRlY3Rpb25zRGFzaGJvYXJkU3RhdHMiLCJnZXQ6ZGV0ZWN0aW9uc01ldHJpY3MiLCJnZXQ6ZXZlbnRzIiwiZ2V0OmV4dGVybmFsLWlkIiwiZ2V0OmZsb3dzVGhyb3VnaHB1dCIsImdldDpnaXRodWJBcHAiLCJnZXQ6aG9zdHNDb25uZWN0aW9uIiwiZ2V0OmludGVncmF0aW9ucyIsImdldDppbnZlbnRvcnktY29tbW9uLWtleXMiLCJnZXQ6aW52ZW50b3J5LWNvbm5lY3RlZC1hc3NldHMiLCJnZXQ6b3JnYW5pemF0aW9ucyIsImdldDp3b3JrbG9hZFZpZXciLCJsaXN0OmFwcGxpY2F0aW9ucyIsImxpc3Q6Y2FuZGlkYXRlLWNsdXN0ZXJzIiwibGlzdDpjbGllbnQtY3JlZGVudGlhbHMiLCJsaXN0OmRldGVjdGlvbnMiLCJsaXN0OmludmVudG9yeS1hc3NldHMiLCJsaXN0Omludml0YXRpb25zIiwibGlzdDpwb2xpY2llcyIsImxpc3Q6dW5jb25uZWN0ZWRDbHVzdGVycyIsImxpc3Q6dXNlcnMiLCJ1cGRhdGU6YXBwbGljYXRpb25zIiwidXBkYXRlOmNsaWVudC1jcmVkZW50aWFscyIsInVwZGF0ZTpjcmVkZW50aWFscyIsInVwZGF0ZTpkZXRlY3Rpb25zIiwidXBkYXRlOmVuZHBvaW50cyIsInVwZGF0ZTpwb2xpY2llcyIsInVwZGF0ZTp1c2VyLXJvbGVzIl19.RksyakYoWJElXESfw4S-rK1qLoMio1LSyaVxi1tymyoZ4xb-WYWf45erwZFBidzp10Z7DUPNwAZ5ZeXwk-WMD4gfxEUjlVoLi4HRB5jMfSMzazfjVcR9R5MAk1D_G8wuAty3rc2yNlK5nlt4zou1bLiqABk0VodKl5rtkrh90S1025fy1IMRhI_za12J7HBy-z5aLjWXYEyqI3CKEl2cR7lRy7BAK2qDgs8NcnGPGqqMJ-ValxjLb5jp0IBKokXL5r2RmOleeMbQm-mlauKgYZ7KUyvjHa-IZOeEcs25LmfhYBl2DMWl-xJoKhAvDSQx-_voOoXzNfNWciFb9pTpNQ" \
             --data '{
                 \"type\": \"image_build\",
                 \"reporter\": \"github_actions\",
                 \"data\" :{
-                    \"image\" : \"${IMAGE}\",
+                    \"image\" : \"nginx:1.25\",
                     \"commit_sha\" : \"${GITHUB_SHA}\",
                     \"repository\": \"https://github.com/${GITHUB_REPOSITORY}.git\",
                     \"branch\": \"${GITHUB_REF_NAME}\",
-                    \"image_sha\": \"${IMAGE_SHA}\",
+                    \"image_sha\": \"sha256:9eaa366e8484d8ed2f31e72d2d5465ac09f89c46b70521897e406206ecce70c8\",
                     \"build_time\" : \"$(date +'%Y-%m-%dT%H:%M:%SZ')\"
                 }
             }'
-            "
+             "
+            response=$(eval "${CURL_CMD}")
